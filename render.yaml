@@ -1,0 +1,11 @@
+# Render 一鍵部署設定(需要付費方案才能掛載永久磁碟,資料才不會在重啟後消失)
+services:
+  - type: web
+    name: electronics-learning
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/health
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
