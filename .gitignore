@@ -1,0 +1,10 @@
+# 版權教材(習作、講義 PDF)不放進公開儲存庫
+source/
+# 本機資料
+node_modules/
+dist/
+server/data/
+*.db
+*.db-wal
+*.db-shm
+.DS_Store
