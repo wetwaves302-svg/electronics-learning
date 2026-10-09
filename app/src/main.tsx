@@ -8,8 +8,11 @@ import { api } from './api'
 import { restoreSession } from './auth'
 import { loadOverrides, type Overrides } from './data/bank'
 
-void restoreSession()
-void loadOverrides(() => api<Overrides>('GET', '/api/questions/overrides'))
+// 靜態版(GitHub Pages)沒有伺服器:不登入、不下載老師修訂
+if (import.meta.env.VITE_STATIC !== '1') {
+  void restoreSession()
+  void loadOverrides(() => api<Overrides>('GET', '/api/questions/overrides'))
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
