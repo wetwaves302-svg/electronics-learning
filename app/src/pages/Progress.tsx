@@ -7,6 +7,7 @@ import { clearAttempts, useAttempts } from '../store'
 import { errorCounts, isDue, kpStats } from '../core/progress'
 import MasteryBadge from '../components/MasteryBadge'
 import { ERROR_LABEL } from '../errors'
+import ShareCard from '../components/ShareCard'
 
 export default function Progress() {
   const attempts = useAttempts()
@@ -26,6 +27,7 @@ export default function Progress() {
   return (
     <div className="space-y-5">
       <h1 className="text-2xl font-bold">我的學習紀錄</h1>
+      <ShareCard />
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Stat label="習作題覆蓋" value={`${tried} / ${questions.length}`} />
         <Stat label="首次獨立答對率" value={firstRate === null ? '—' : `${firstRate}%`} note={`${firsts.length} 次首次作答`} />

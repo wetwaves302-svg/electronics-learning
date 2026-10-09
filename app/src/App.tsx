@@ -9,6 +9,7 @@ import { GamePlay, GamesHome } from './pages/Games'
 import Login from './pages/Login'
 import WrongBook from './pages/WrongBook'
 import About from './pages/About'
+import Board from './pages/Board'
 import { useWrongBook } from './wrongbook'
 import TeacherHome from './pages/teacher/TeacherHome'
 import ClassPage from './pages/teacher/ClassPage'
@@ -72,6 +73,7 @@ export default function App() {
           <Route path="/learn/:id" element={<Learn />} />
           <Route path="/coach/:qid" element={<Coach />} />
           <Route path="/about" element={<About />} />
+          <Route path="/board" element={<Board />} />
           <Route path="/login" element={<Login />} />
           <Route path="/wrongbook" element={<WrongBook />} />
           <Route path="/teacher" element={<TeacherHome />} />
@@ -85,7 +87,7 @@ export default function App() {
         </Routes>
       </main>
       <footer className="mx-auto max-w-5xl w-full px-4 pb-6"><p className="rounded-2xl bg-white/90 text-center text-xs text-navy-900 py-2 px-3">
-        教材來源:台科大圖書《電子學 I》講義、《電子學(上)習作本詳解》(著作權屬原出版者)。本站為教學輔助,非官方產品。範圍:習作 1-1~2-3 整流濾波。題目與解析尚未經專業教師審核。<Link to="/about" className="ml-1 font-bold underline">詳細來源</Link>
+        教材來源:台科大圖書《電子學 I》講義、《電子學(上)習作本詳解》(著作權屬原出版者)。本站為教學輔助,非官方產品。範圍:習作 1-1~2-3 整流濾波。題目與解析尚未經專業教師審核。<Link to="/about" className="ml-1 font-bold underline">詳細來源</Link><Link to="/board" className="ml-3 underline">教師看板</Link>
       </p></footer>
     </div>
   )

@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { ERROR_LABEL } from '../../errors'
 import { Back, RequireTeacher, Td, Th, Wrap, pct, useApiData, when, Err } from './common'
 
-interface H {
+export interface H {
   student: { id: number; username: string; name: string }
   summary: { tried: number; coverage: number; firstTotal: number; firstCorrect: number; firstRate: number | null; independent: number; stuck: number; needsHelp: boolean; helpReasons: string[]; topErrors: [string, number][]; weakKps: { id: string; title: string; mastery: string }[]; lastActive: number | null }
   perQuestion: { id: string; label: string; unit: string; tries: number; firstCorrect: boolean | null; everCorrect: boolean; lastAt: number }[]
@@ -21,8 +21,14 @@ function Inner() {
     <div className="space-y-4">
       <Back to="/teacher">所有班級</Back>
       <Err msg={error} />
-      {data && (
-        <>
+      {data && <StudentDetail data={data} />}
+    </div>
+  )
+}
+
+export function StudentDetail({ data }: { data: H }) {
+  return (
+    <>
           <h1 className="inline-block rounded-2xl bg-white/90 px-3 text-2xl font-extrabold text-navy-900">{data.student.name || data.student.username}<span className="ml-2 text-sm font-normal">({data.student.username})</span></h1>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[['已練習題數', String(data.summary.tried)], ['題庫覆蓋率', pct(data.summary.coverage)], ['首次獨立答對率', `${pct(data.summary.firstRate)}${data.summary.firstTotal ? `(${data.summary.firstCorrect}/${data.summary.firstTotal})` : ''}`], ['能獨立答對 / 尚未答對', `${data.summary.independent} / ${data.summary.stuck}`]].map(([l, v]) => <div key={l} className="card text-center"><div className="text-xl font-bold text-navy-800">{v}</div><div className="text-sm">{l}</div></div>)}
@@ -36,8 +42,6 @@ function Inner() {
           <section className="card space-y-1"><h2 className="font-bold">最近的作答歷程(最多 300 筆)</h2>
             <Wrap><table className="w-full"><thead><tr><Th>時間</Th><Th>類型</Th><Th>項目</Th><Th>作答方式</Th><Th>對錯</Th><Th>錯誤類型</Th></tr></thead>
               <tbody>{data.recent.map((a, i) => <tr key={i}><Td>{when(a.at)}</Td><Td>{SRC[a.source] ?? a.source}</Td><Td>{a.itemId}</Td><Td>{KIND[a.kind] ?? a.kind}</Td><Td>{a.correct ? '對' : '錯'}</Td><Td>{a.errorType ? (ERROR_LABEL[a.errorType] ?? a.errorType) : ''}</Td></tr>)}</tbody></table></Wrap></section>
-        </>
-      )}
-    </div>
+    </>
   )
 }

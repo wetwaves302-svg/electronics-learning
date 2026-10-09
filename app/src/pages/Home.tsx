@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { api } from '../api'
 import { useAuth } from '../auth'
 import { useWrongBook } from '../wrongbook'
+import ShareCard from '../components/ShareCard'
 
 interface Assign { id: number; title: string; questionIds: string[]; due: number | null; progress: { done: number; independent: number; total: number } }
 
@@ -75,6 +76,7 @@ export default function Home() {
           <Link to={`/practice/${wrong[0].itemId}?review=1&wb=1`} className="btn btn-sun">練習我的錯題</Link>
         </section>
       )}
+      <ShareCard />
       <Assignments />
       <section className="grid gap-3 sm:grid-cols-2" aria-label="單元">
         {units.map((u) => {

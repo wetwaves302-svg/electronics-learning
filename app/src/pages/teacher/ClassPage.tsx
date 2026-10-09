@@ -8,7 +8,7 @@ import { Back, Err, RequireTeacher, Td, Th, Wrap, pct, useApiData, when } from '
 
 interface StudentSum { id: number; username: string; name: string; tried: number; coverage: number; firstTotal: number; firstCorrect: number; firstRate: number | null; independent: number; stuck: number; gameAttempts: number; lastActive: number | null; topErrors: [string, number][]; needsHelp: boolean; helpReasons: string[] }
 interface QStat { id: string; unit: string; label: string; students: number; firstTotal: number; firstCorrect: number; firstRate: number | null; topError: string | null }
-interface Analytics {
+export interface Analytics {
   class: { id: number; name: string; code: string }
   students: StudentSum[]; questions: QStat[]
   units: { unit: string; questions: number; avgIndependentRatio: number; studentsDone: number }[]
@@ -18,6 +18,7 @@ interface Analytics {
 }
 type Tab = 'overview' | 'students' | 'questions' | 'assign' | 'export'
 
+export const pctFmt = pct
 export default function ClassPage() { return <RequireTeacher><Inner /></RequireTeacher> }
 
 function Inner() {
@@ -49,7 +50,7 @@ function Inner() {
 
 const avg = (xs: (number | null)[]) => { const v = xs.filter((x): x is number => x !== null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null }
 
-function Overview({ a }: { a: Analytics }) {
+export function Overview({ a, onStudent }: { a: Analytics; onStudent?: (id: number) => void }) {
   const active = a.students.filter((s) => s.tried > 0).length
   const maxErr = Math.max(1, ...a.commonErrors.map(([, n]) => n))
   return (
@@ -63,7 +64,7 @@ function Overview({ a }: { a: Analytics }) {
       <section className="card space-y-2">
         <h2 className="font-bold">需要補救的學生</h2>
         {a.needHelp.length === 0 ? <p className="text-sm">目前沒有符合條件的學生。</p> : (
-          <ul className="space-y-1">{a.needHelp.map((s) => <li key={s.id} className="text-sm"><Link className="font-bold underline" to={`/teacher/student/${s.id}`}>{s.name}</Link>:{s.reasons.join(';')}</li>)}</ul>
+          <ul className="space-y-1">{a.needHelp.map((s) => <li key={s.id} className="text-sm">{onStudent ? <button className="font-bold underline" onClick={() => onStudent(s.id)}>{s.name}</button> : <Link className="font-bold underline" to={`/teacher/student/${s.id}`}>{s.name}</Link>}:{s.reasons.join(';')}</li>)}</ul>
         )}
         <p className="text-xs text-slate-600">條件:首次獨立作答 ≥ 5 次且答對率 &lt; 50%,或有 ≥ 3 題一直沒答對。</p>
       </section>
@@ -137,7 +138,7 @@ function Students({ a, classId, reload }: { a: Analytics; classId: number; reloa
   )
 }
 
-function QuestionStats({ a }: { a: Analytics }) {
+export function QuestionStats({ a }: { a: Analytics }) {
   const [unit, setUnit] = useState('all')
   const rows = a.questions.filter((q) => unit === 'all' || q.unit === unit).sort((x, y) => (x.firstRate ?? 2) - (y.firstRate ?? 2))
   return (
